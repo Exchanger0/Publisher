@@ -20,6 +20,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(a -> a
                         .requestMatchers("/registration").permitAll()
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/posts").permitAll()
                         .requestMatchers("/styles/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -27,7 +28,7 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .failureUrl("/login?error=true")
-                        .defaultSuccessUrl("/posts/posts", false)
+                        .defaultSuccessUrl("/posts", false)
                         .permitAll())
                 .userDetailsService(userDetailsService())
                 .logout(l -> l
