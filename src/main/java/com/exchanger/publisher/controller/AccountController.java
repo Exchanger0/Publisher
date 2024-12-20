@@ -7,14 +7,10 @@ import com.exchanger.publisher.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/account")
@@ -34,10 +30,12 @@ public class AccountController {
     @GetMapping
     public String getInfo(@AuthenticationPrincipal User user, Model model) {
         LOGGER.info("Received a GET request to url: /account");
-        LOGGER.info("User={}", user);
-        LOGGER.info("User.posts={}", user.getPosts());
+        LOGGER.info("User id={}", user.getId());
 
-        model.addAttribute("user", new UserDto(user, groupService.findByCreatorId(user.getId())));
+        model.addAttribute("user", new UserDto(
+                userService.findById(user.getId()),
+                groupService.findAllByCreatorId(user.getId())
+        ));
 
         return "account";
     }
@@ -46,11 +44,22 @@ public class AccountController {
     public String updateAbout(@RequestParam("about") String about, @AuthenticationPrincipal User user) {
         LOGGER.info("Received a PUT request to url: /account");
 
+
         if (!about.equals(user.getAboutMyself())) {
             user.setAboutMyself(about);
             userService.save(user);
         }
 
         return "redirect:/account";
+    }
+
+    @DeleteMapping
+    public String delete(@AuthenticationPrincipal User user) {
+        LOGGER.info("Received a DELETE request to url: /account");
+        LOGGER.info("Delete user with id={}", user.getId());
+
+        userService.delete(user);
+
+        return "redirect:/logout";
     }
 }

@@ -1,25 +1,25 @@
 package com.exchanger.publisher.service;
 
 import com.exchanger.publisher.model.Group;
-import com.exchanger.publisher.repository.GroupRepository;
+import com.exchanger.publisher.repository.GroupRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.LinkOption;
 import java.util.List;
 
 @Service
-@Transactional
-public class GroupService extends BaseService<Group, Long, GroupRepository> {
+@Transactional(propagation = Propagation.REQUIRED)
+public class GroupService extends BaseService<Group, Long, GroupRepo> {
 
     @Autowired
-    public GroupService(GroupRepository repository) {
+    public GroupService(GroupRepo repository) {
         super(repository);
     }
 
     @Transactional(readOnly = true)
-    public List<Group> findByCreatorId(long creatorId) {
-        return repository.findByCreatorId(creatorId);
+    public List<Group> findAllByCreatorId(long creatorId) {
+        return repository.findAllByCreatorId(creatorId);
     }
 }

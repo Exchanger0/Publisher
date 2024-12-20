@@ -72,6 +72,9 @@
                 <li th:each="group : ${user.createdGroups}" th:text="${group}"></li>
             </ul>
         </div>
+        <form th:method="DELETE" th:action="@{/account}">
+            <input class="btn" type="submit" name="delete" value="Delete account">
+        </form>
     </div>
 </div>
 

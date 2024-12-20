@@ -16,9 +16,9 @@ public class Group {
     @ManyToOne
     private User creator;
     private String description;
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group", fetch = FetchType.EAGER)
     private List<Post> posts;
-    @ManyToMany(mappedBy = "groups")
+    @ManyToMany(mappedBy = "groups", fetch = FetchType.EAGER)
     private List<User> members;
 
     public Group() {
@@ -60,6 +60,14 @@ public class Group {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     public List<User> getMembers() {

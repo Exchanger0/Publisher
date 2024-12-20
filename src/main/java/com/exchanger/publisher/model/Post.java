@@ -1,7 +1,6 @@
 package com.exchanger.publisher.model;
 
 import jakarta.persistence.*;
-import jdk.dynalink.linker.LinkerServices;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,9 +13,9 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User author;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Group group;
     private String title;
     private String content;

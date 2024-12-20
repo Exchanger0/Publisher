@@ -20,7 +20,7 @@ public class User implements UserDetails {
     private String password;
     private String aboutMyself;
     private List<String> roles;
-    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Post> posts;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_group",
