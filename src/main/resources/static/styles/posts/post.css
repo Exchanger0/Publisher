@@ -1,0 +1,32 @@
+.post {
+	padding: 10px;
+}
+
+.title,
+.link,
+.creation-date {
+	margin: 5px 0px 5px 0px;
+}
+
+.link {
+	color: #00ADB5;
+}
+.link:visited {
+	color: #008187;
+}
+
+.stats {
+	margin-top: 10px;
+}
+
+.like,
+.dislike {
+	cursor: pointer;
+	padding: 10px;
+}
+
+.active {
+	background-color: #393E46;
+	color: #EEEEEE;
+	border-radius: 10px;
+}

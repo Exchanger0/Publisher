@@ -23,7 +23,6 @@
     <div>
         <a class="a-btn" th:href="@{/posts}">Posts</a>
         <a class="a-btn" href="">Groups</a>
-        <a class="a-btn" href="">Users</a>
     </div>
     <div class="account">
         <a class="a-btn" href="">Account</a>
@@ -49,7 +48,9 @@
                 <button class="btn show-posts">Show</button>
             </p>
             <ul class="post-list">
-                <li th:each="post : ${user.posts}" th:text="${post}"></li>
+                <li th:each="post : ${user.posts}">
+                    <a th:text="${post.title}" th:href="@{/posts/{postId}(postId=${post.id})}">Post link</a>
+                </li>
             </ul>
         </div>
         <div class="list-box">
@@ -59,7 +60,9 @@
                 <button class="btn show-groups">Show</button>
             </p>
             <ul class="group-list">
-                <li th:each="group : ${user.groups}" th:text="${group}"></li>
+                <li th:each="group : ${user.groups}">
+                    <a th:text="${group.name}" th:href="@{/groups/{groupId}(groupId=${group.id})}">Group link</a>
+                </li>
             </ul>
         </div>
         <div class="list-box">
@@ -69,7 +72,9 @@
                 <button class="btn show-created-groups">Show</button>
             </p>
             <ul class="created-group-list">
-                <li th:each="group : ${user.createdGroups}" th:text="${group}"></li>
+                <li th:each="group : ${user.createdGroups}">
+                    <a th:text="${group.name}" th:href="@{/groups/{groupId}(groupId=${group.id})}">Group link</a>
+                </li>
             </ul>
         </div>
         <form th:method="DELETE" th:action="@{/account}">

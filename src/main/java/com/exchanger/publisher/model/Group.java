@@ -16,9 +16,9 @@ public class Group {
     @ManyToOne
     private User creator;
     private String description;
-    @OneToMany(mappedBy = "group", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "group")
     private List<Post> posts;
-    @ManyToMany(mappedBy = "groups", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "groups")
     private List<User> members;
 
     public Group() {

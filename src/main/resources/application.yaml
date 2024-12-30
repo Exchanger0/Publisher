@@ -1,6 +1,9 @@
 server:
   servlet:
     context-path: "/publisher"
+  error:
+    whitelabel:
+      enabled: true
 
 spring:
   application:
@@ -12,7 +15,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: "validate"
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true

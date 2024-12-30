@@ -4,6 +4,7 @@ import com.exchanger.publisher.model.User;
 import com.exchanger.publisher.repository.UserRepo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -97,5 +98,11 @@ public class UserService extends BaseService<User, Long, UserRepo> {
         for (User user : entities) {
             deleteById(user.getId());
         }
+    }
+
+    public User findByIdWithEntities(long id) {
+        User user = findById(id);
+        Hibernate.initialize(user);
+        return user;
     }
 }

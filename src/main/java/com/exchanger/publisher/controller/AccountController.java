@@ -1,6 +1,6 @@
 package com.exchanger.publisher.controller;
 
-import com.exchanger.publisher.dto.UserDto;
+import com.exchanger.publisher.dto.AccountDto;
 import com.exchanger.publisher.model.User;
 import com.exchanger.publisher.service.GroupService;
 import com.exchanger.publisher.service.UserService;
@@ -32,8 +32,8 @@ public class AccountController {
         LOGGER.info("Received a GET request to url: /account");
         LOGGER.info("User id={}", user.getId());
 
-        model.addAttribute("user", new UserDto(
-                userService.findById(user.getId()),
+        model.addAttribute("user", new AccountDto(
+                userService.findByIdWithEntities(user.getId()),
                 groupService.findAllByCreatorId(user.getId())
         ));
 

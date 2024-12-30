@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class UserDto {
+public class AccountDto {
 
     private long id;
     private String username;
@@ -18,16 +18,16 @@ public class UserDto {
     private List<Group> groups = new ArrayList<>();
     private List<Group> createdGroups = new ArrayList<>();
 
-    public UserDto() {
+    public AccountDto() {
     }
 
-    public UserDto(String username, String aboutMyself, List<String> roles) {
+    public AccountDto(String username, String aboutMyself, List<String> roles) {
         this.username = username;
         this.aboutMyself = aboutMyself;
         this.roles = roles;
     }
 
-    public UserDto(User user, List<Group> createdGroups) {
+    public AccountDto(User user, List<Group> createdGroups) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.aboutMyself = user.getAboutMyself();
@@ -97,8 +97,8 @@ public class UserDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserDto userDto = (UserDto) o;
-        return id == userDto.id && Objects.equals(username, userDto.username);
+        AccountDto accountDto = (AccountDto) o;
+        return id == accountDto.id && Objects.equals(username, accountDto.username);
     }
 
     @Override

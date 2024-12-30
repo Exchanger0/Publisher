@@ -41,3 +41,11 @@ header {
 .main {
 	background-color: #EEEEEE;
 }
+
+.btn {
+	font-size: 20px;
+    background-color: #393E46;
+    color: #EEEEEE;
+    padding: 10px;
+    border-radius: 15px;
+}

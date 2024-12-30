@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>Post</title>
+
+    <link rel="stylesheet" th:href="@{/styles/header.css}">
+    <link rel="stylesheet" th:href="@{/styles/posts/post.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    <div class="title-parent">
+        <p class="title">Publisher</p>
+    </div>
+    <div>
+        <a class="a-btn" th:href="@{/posts}">Posts</a>
+        <a class="a-btn" href="">Groups</a>
+    </div>
+    <div class="account">
+        <a class="a-btn" th:href="@{/account}">Account</a>
+    </div>
+</header>
+
+<form method="GET" th:action="@{/posts}">
+    <input type="submit" value="Back" class="btn" style="margin: 10px 0px 0px 10px">
+</form>
+
+<div class="post">
+    <p class="title" th:text="${post.title}">Title</p>
+    <p>Author:
+        <a class="link" th:text="${post.author.username}" th:href="@{/users/{userId}(userId=${post.author.id})}">User link</a>
+    </p>
+    <p th:if="${post.group} != null">Group:
+        <a class="link" th:text="${post.group.name}" th:href="@{/groups/{groupId}(groupId=${post.group.id})}">Group link</a>
+    </p>
+    <p class="creation-date">Creation date: <span th:text="${post.creationDate}"></span></p>
+    <p>Tags: <span th:each="tag : ${post.tags}" th:text="${tag}"></span></p>
+    <p th:text="${post.content}">Content</p>
+    <div class="stats">
+        <span th:text="|${post.likes} likes|" class="like" th:classappend="${liked ? 'active' : ''}"></span>
+        <span th:text="|${post.dislikes} dislikes|" class="dislike" th:classappend="${disliked ? 'active' : ''}"></span> 
+        <span th:text="|${post.views} views|"></span> 
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/scripts/post.js}"></script>
+</body>
+</html>

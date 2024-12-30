@@ -2,8 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Publisher</title>
+    <title>Posts</title>
     <link rel="stylesheet" th:href="@{/styles/header.css}">
+    <link rel="stylesheet" th:href="@{/styles/posts/posts.css}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +22,6 @@
     <div>
         <a class="a-btn" th:href="@{/posts}">Posts</a>
         <a class="a-btn" href="">Groups</a>
-        <a class="a-btn" href="">Users</a>
     </div>
     <div class="account">
         <a class="a-btn" th:href="@{/account}">Account</a>
@@ -29,7 +29,20 @@
 </header>
 
 <div class="main">
-    <p>Home page</p>
+    <div class="posts">
+        <div th:each="post : ${posts}" class="post">
+            <p th:text="${post.title}" class="title">Title</p>
+            <p th:text="${post.content}" class="content">Content</p>
+            <p th:text="${post.creationDate}" class="creation-date">Creation date</p>
+            <div class="stats">
+                <span th:text="|${post.likes} likes|"></span>
+                <span th:text="|${post.dislikes} dislikes|"></span> 
+                <span th:text="|${post.views} views|"></span> 
+            </div>
+        </div>
+    </div>
+    <button id="load-btn">Load more</button>
 </div>
+<script type="text/javascript" th:src="@{/scripts/posts.js}"></script>
 </body>
 </html>

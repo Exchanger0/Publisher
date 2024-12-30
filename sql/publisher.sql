@@ -1,4 +1,7 @@
 DROP TABLE IF EXISTS comment;
+DROP TABLE IF EXISTS "like";
+DROP TABLE IF EXISTS dislike;
+DROP TABLE IF EXISTS views;
 DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS user_group;
 DROP TABLE IF EXISTS "group";
@@ -31,10 +34,22 @@ CREATE TABLE post (
 	title text NOT NULL,
 	content text,
 	creation_date date NOT NULL,
-	tags text[],
-	views bigint CHECK(views >= 0),
-	likes bigint CHECK(likes >= 0),
-	dislikes bigint CHECK(dislikes >= 0)
+	tags text[]
+);
+
+CREATE TABLE "like" (
+	post_id bigint REFERENCES post(id),
+	user_id bigint REFERENCES "user"(id)
+);
+
+CREATE TABLE dislike (
+	post_id bigint REFERENCES post(id),
+	user_id bigint REFERENCES "user"(id)
+);
+
+CREATE TABLE views (
+	post_id bigint REFERENCES post(id),
+	user_id bigint REFERENCES "user"(id)
 );
 
 CREATE TABLE comment (
