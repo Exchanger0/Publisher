@@ -44,7 +44,6 @@ public class AccountController {
     public String updateAbout(@RequestParam("about") String about, @AuthenticationPrincipal User user) {
         LOGGER.info("Received a PUT request to url: /account");
 
-
         if (!about.equals(user.getAboutMyself())) {
             user.setAboutMyself(about);
             userService.save(user);

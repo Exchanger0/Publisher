@@ -21,19 +21,6 @@ public class PostDto {
     private long likes;
     private long dislikes;
 
-    public PostDto(Post post) {
-        this.id = post.getId();
-        this.author = post.getAuthor();
-        this.group = post.getGroup();
-        this.title = post.getTitle();
-        this.content = post.getContent();
-        this.creationDate = post.getCreationDate();
-        this.tags = post.getTags();
-        this.views = post.getViews().size();
-        this.likes = post.getLikes().size();
-        this.dislikes = post.getDislikes().size();
-    }
-
     public PostDto(long id, User author, Group group, String title, String content, LocalDate creationDate, List<String> tags, long views, long likes, long dislikes) {
         this.id = id;
         this.author = author;
@@ -45,6 +32,11 @@ public class PostDto {
         this.views = views;
         this.likes = likes;
         this.dislikes = dislikes;
+    }
+
+    public PostDto(Post post) {
+        this(post.getId(), post.getAuthor(), post.getGroup(), post.getTitle(), post.getContent(), post.getCreationDate(),
+                post.getTags(), post.getViews().size(), post.getLikes().size(), post.getDislikes().size());
     }
 
     public long getId() {

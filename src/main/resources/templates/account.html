@@ -5,6 +5,7 @@
     <title>Account</title>
 
     <link rel="stylesheet" th:href="@{/styles/header.css}">
+    <link rel="stylesheet" th:href="@{/styles/general.css}">
     <link rel="stylesheet" th:href="@{/styles/account.css}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +26,7 @@
         <a class="a-btn" href="">Groups</a>
     </div>
     <div class="account">
-        <a class="a-btn" href="">Account</a>
+        <a class="a-btn" th:href="@{/account}">Account</a>
     </div>
 </header>
 
@@ -38,14 +39,14 @@
             <p>About:</p>
             <form th:method="PUT" th:action="@{/account}" class="about-form">
                 <textarea name="about" th:text="${user.aboutMyself}" rows="10" cols="35" style="resize: none;"></textarea>
-                <input class="btn" type="submit" value="Save changes">
+                <input class="button" type="submit" value="Save changes">
             </form>
         </div>
         <div class="list-box">
             <p>
                 My posts: 
                 <span th:text="${user.posts.size()}"></span>
-                <button class="btn show-posts">Show</button>
+                <button class="button show-posts">Show</button>
             </p>
             <ul class="post-list">
                 <li th:each="post : ${user.posts}">
@@ -57,7 +58,7 @@
             <p>
                 My groups: 
                 <span th:text="${user.groups.size()}"></span>
-                <button class="btn show-groups">Show</button>
+                <button class="button show-groups">Show</button>
             </p>
             <ul class="group-list">
                 <li th:each="group : ${user.groups}">
@@ -69,7 +70,7 @@
             <p>
                 My created groups: 
                 <span th:text="${user.createdGroups.size()}"></span>
-                <button class="btn show-created-groups">Show</button>
+                <button class="button show-created-groups">Show</button>
             </p>
             <ul class="created-group-list">
                 <li th:each="group : ${user.createdGroups}">
@@ -78,7 +79,7 @@
             </ul>
         </div>
         <form th:method="DELETE" th:action="@{/account}">
-            <input class="btn" type="submit" name="delete" value="Delete account">
+            <input class="button" type="submit" name="delete" value="Delete account">
         </form>
     </div>
 </div>

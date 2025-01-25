@@ -8,15 +8,9 @@
 	margin: 5px 0px 5px 0px;
 }
 
-.link {
-	color: #00ADB5;
-}
-.link:visited {
-	color: #008187;
-}
-
 .stats {
 	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .like,
@@ -29,4 +23,12 @@
 	background-color: #393E46;
 	color: #EEEEEE;
 	border-radius: 10px;
+}
+
+.comment {
+	margin: 15px;
+}
+
+.comment p {
+	word-wrap: break-word;
 }

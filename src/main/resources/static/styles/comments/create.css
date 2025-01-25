@@ -1,0 +1,29 @@
+.main {
+	height: 85vh;
+}
+
+.box {
+	font-size: 20px;
+
+	background-color: #EEEEEE;
+	color: #222831;
+
+	padding: 20px;
+	border-radius: 20px;
+}
+
+.title {
+	font-family: "Playfair Display SC", serif;
+	font-size: 45px;
+	padding: 20px;
+}
+
+.to p {
+	word-wrap: break-word;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}

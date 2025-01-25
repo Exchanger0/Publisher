@@ -17,16 +17,6 @@ public class PostMainData {
     private long likes;
     private long dislikes;
 
-    public PostMainData(Post post) {
-        this.id = post.getId();
-        this.title = post.getTitle();
-        this.content = post.getContent();
-        this.creationDate = post.getCreationDate();
-        this.views = post.getViews().size();
-        this.likes = post.getLikes().size();
-        this.dislikes = post.getDislikes().size();
-    }
-
     public PostMainData(long id, String title, String content, LocalDate creationDate, long views, long likes, long dislikes) {
         this.id = id;
         this.title = title;
@@ -35,6 +25,11 @@ public class PostMainData {
         this.views = views;
         this.likes = likes;
         this.dislikes = dislikes;
+    }
+
+    public PostMainData(Post post) {
+        this(post.getId(), post.getTitle(), post.getContent(), post.getCreationDate(), post.getViews().size(),
+                post.getLikes().size(), post.getDislikes().size());
     }
 
     public long getId() {

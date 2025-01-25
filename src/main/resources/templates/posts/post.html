@@ -7,6 +7,7 @@
     <title>Post</title>
 
     <link rel="stylesheet" th:href="@{/styles/header.css}">
+    <link rel="stylesheet" th:href="@{/styles/general.css}">
     <link rel="stylesheet" th:href="@{/styles/posts/post.css}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,16 +33,16 @@
 </header>
 
 <form method="GET" th:action="@{/posts}">
-    <input type="submit" value="Back" class="btn" style="margin: 10px 0px 0px 10px">
+    <input type="submit" value="Back" class="button" style="margin: 10px 0px 0px 10px">
 </form>
 
 <div class="post">
     <p class="title" th:text="${post.title}">Title</p>
     <p>Author:
-        <a class="link" th:text="${post.author.username}" th:href="@{/users/{userId}(userId=${post.author.id})}">User link</a>
+        <a class="text-button" th:text="${post.author.username}" th:href="@{/users/{userId}(userId=${post.author.id})}">User link</a>
     </p>
     <p th:if="${post.group} != null">Group:
-        <a class="link" th:text="${post.group.name}" th:href="@{/groups/{groupId}(groupId=${post.group.id})}">Group link</a>
+        <a class="text-button" th:text="${post.group.name}" th:href="@{/groups/{groupId}(groupId=${post.group.id})}">Group link</a>
     </p>
     <p class="creation-date">Creation date: <span th:text="${post.creationDate}"></span></p>
     <p>Tags: <span th:each="tag : ${post.tags}" th:text="${tag}"></span></p>
@@ -49,8 +50,14 @@
     <div class="stats">
         <span th:text="|${post.likes} likes|" class="like" th:classappend="${liked ? 'active' : ''}"></span>
         <span th:text="|${post.dislikes} dislikes|" class="dislike" th:classappend="${disliked ? 'active' : ''}"></span> 
-        <span th:text="|${post.views} views|"></span> 
+        <span th:text="|${post.views} views|"></span>
     </div>
+
+    <p class="text-button" onclick="getCreateCommentsForm(-1)" style="margin: 0px 0px 10px 10px">Comment</p>
+
+    <div class="comments"></div>
+
+    <button id="load-comments" class="button">Load comments</button>
 </div>
 
 <script type="text/javascript" th:src="@{/scripts/post.js}"></script>

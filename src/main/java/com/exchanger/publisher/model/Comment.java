@@ -18,8 +18,10 @@ public class Comment {
     @OneToOne
     private Comment parent;
 
-    public Comment(long id, String content, User author, Post post, Comment parent) {
-        this.id = id;
+    public Comment() {
+    }
+
+    public Comment(String content, User author, Post post, Comment parent) {
         this.content = content;
         this.author = author;
         this.post = post;

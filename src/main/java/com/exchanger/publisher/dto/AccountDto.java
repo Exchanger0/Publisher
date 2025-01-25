@@ -21,17 +21,15 @@ public class AccountDto {
     public AccountDto() {
     }
 
-    public AccountDto(String username, String aboutMyself, List<String> roles) {
+    public AccountDto(long id, String username, String aboutMyself, List<String> roles) {
+        this.id = id;
         this.username = username;
         this.aboutMyself = aboutMyself;
         this.roles = roles;
     }
 
     public AccountDto(User user, List<Group> createdGroups) {
-        this.id = user.getId();
-        this.username = user.getUsername();
-        this.aboutMyself = user.getAboutMyself();
-        this.roles = user.getRoles();
+        this(user.getId(), user.getUsername(), user.getAboutMyself(), user.getRoles());
         this.posts = user.getPosts();
         this.groups = user.getGroups();
         this.createdGroups = createdGroups;
