@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
@@ -36,9 +37,18 @@ public class PostService extends BaseService<Post, Long, PostRepo> {
         entityManager.refresh(post);
     }
 
-    public void deleteByAuthorId(long id) {
+    @Override
+    public void deleteAllById(Iterable<? extends Long> ids) {
         Session session = entityManager.unwrap(Session.class);
-        List<Long> ids = repository.findByAuthorId(id).stream().map(Post::getId).toList();
+        //отсоединение поста от групп, созданных пользователем
+        session.createMutationQuery("""
+                UPDATE Post p SET p.group = NULL
+                WHERE p.group IN (
+                    SELECT gr FROM Group gr WHERE gr.creator.id in :ids
+                )
+                """)
+                .setParameter("ids", ids)
+                .executeUpdate();
         //удаление лайков постов
         session.createMutationQuery("""
                 DELETE Like l WHERE l.id.postId in :ids
@@ -69,5 +79,24 @@ public class PostService extends BaseService<Post, Long, PostRepo> {
                 """)
                 .setParameter("ids", ids)
                 .executeUpdate();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        deleteAllById(List.of(id));
+    }
+
+    @Override
+    public void delete(Post entity) {
+        deleteAllById(List.of(entity.getId()));
+    }
+
+    @Override
+    public void deleteAll(Iterable<Post> entities) {
+        deleteAllById(StreamSupport.stream(entities.spliterator(), false).map(Post::getId).toList());
+    }
+
+    public void deleteByAuthorId(long id) {
+        deleteAllById(repository.findByAuthorId(id).stream().map(Post::getId).toList());
     }
 }
