@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface PostRepo extends ListCrudRepository<Post, Long> {
     List<Post> findAll(Pageable pageable);
+
+    List<Post> findByAuthorId(long id);
 }

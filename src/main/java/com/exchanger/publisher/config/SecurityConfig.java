@@ -25,6 +25,8 @@ public class SecurityConfig {
                         .requestMatchers("/account").authenticated()
                         .requestMatchers("/posts/*/like").authenticated()
                         .requestMatchers("/posts/*/dislike").authenticated()
+                        .requestMatchers("/posts/create").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/posts").authenticated()
                         .requestMatchers("/comments/create").authenticated()
                         .requestMatchers(HttpMethod.POST, "/comments").authenticated()
                         .anyRequest().permitAll()

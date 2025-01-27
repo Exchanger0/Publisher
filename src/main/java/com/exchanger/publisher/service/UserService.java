@@ -17,12 +17,15 @@ import java.util.List;
 @Transactional(propagation = Propagation.REQUIRED)
 public class UserService extends BaseService<User, Long, UserRepo> {
 
+    private PostService postService;
+
     @PersistenceContext
     private EntityManager entityManager;
 
     @Autowired
-    public UserService(UserRepo repository) {
+    public UserService(UserRepo repository, PostService postService) {
         super(repository);
+        this.postService = postService;
     }
 
     public void save(String username, String password) {
@@ -68,11 +71,7 @@ public class UserService extends BaseService<User, Long, UserRepo> {
                 .setParameter("id", id)
                 .executeUpdate();
         //удаление постов созданных пользователем
-        session.createMutationQuery("""
-                DELETE Post p WHERE p.author.id = :id
-                """)
-                .setParameter("id", id)
-                .executeUpdate();
+        postService.deleteByAuthorId(id);
         //удаление самого пользователя
         session.createMutationQuery("""
                 DELETE User u WHERE u.id = :id

@@ -4,6 +4,7 @@ import com.exchanger.publisher.model.Post;
 import com.exchanger.publisher.repository.PostRepo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,40 @@ public class PostService extends BaseService<Post, Long, PostRepo> {
 
     public void refresh(Post post) {
         entityManager.refresh(post);
+    }
+
+    public void deleteByAuthorId(long id) {
+        Session session = entityManager.unwrap(Session.class);
+        List<Long> ids = repository.findByAuthorId(id).stream().map(Post::getId).toList();
+        //удаление лайков постов
+        session.createMutationQuery("""
+                DELETE Like l WHERE l.id.postId in :ids
+                """)
+                .setParameter("ids", ids)
+                .executeUpdate();
+        //удаление дизлайков постов
+        session.createMutationQuery("""
+                DELETE Dislike dl WHERE dl.id.postId in :ids
+                """)
+                .setParameter("ids", ids)
+                .executeUpdate();
+        //удаление просмотров постов
+        session.createMutationQuery("""
+                DELETE Views v WHERE v.id.postId in :ids
+                """)
+                .setParameter("ids", ids)
+                .executeUpdate();
+        //удаление комментариев постов
+        session.createMutationQuery("""
+                DELETE Comment c WHERE c.post.id in :ids
+                """)
+                .setParameter("ids", ids)
+                .executeUpdate();
+        //удаление постов
+        session.createMutationQuery("""
+                DELETE Post p WHERE p.id in :ids
+                """)
+                .setParameter("ids", ids)
+                .executeUpdate();
     }
 }

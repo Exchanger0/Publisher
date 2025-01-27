@@ -17,18 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
-<header>
-    <div class="title-parent">
-        <p class="title">Publisher</p>
-    </div>
-    <div>
-        <a class="a-btn" th:href="@{/posts}">Posts</a>
-        <a class="a-btn" href="">Groups</a>
-    </div>
-    <div class="account">
-        <a class="a-btn" th:href="@{/account}">Account</a>
-    </div>
-</header>
+<div th:replace="~{header :: header}"></div>
 
 <div class="main">
     <div class="user-info">

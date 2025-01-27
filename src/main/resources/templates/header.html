@@ -2,26 +2,30 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Posts</title>
+
     <link rel="stylesheet" th:href="@{/styles/header.css}">
-    <link rel="stylesheet" th:href="@{/styles/general.css}">
-    <link rel="stylesheet" th:href="@{/styles/posts/posts.css}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{header :: header}"></div>
-
-<div class="main">
-    <div class="posts"></div>
-    <button id="load-btn" class="button">Load more</button>
-</div>
-<script type="text/javascript" th:src="@{/scripts/posts.js}"></script>
+<header th:fragment="header">
+    <div class="title-parent">
+        <p class="title">Publisher</p>
+    </div>
+    <div>
+        <a class="a-btn" th:href="@{/posts}">Posts</a>
+        <a class="a-btn" href="">Groups</a>
+        <a class="a-btn" th:href="@{/posts/create}">Create post</a>
+    </div>
+    <div class="account">
+        <a class="a-btn" th:href="@{/account}">Account</a>
+    </div>
+</header>
 </body>
 </html>

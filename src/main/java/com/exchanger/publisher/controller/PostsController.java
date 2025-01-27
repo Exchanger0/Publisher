@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -114,5 +115,27 @@ public class PostsController {
         }
 
         return Map.of("dislikes", p1.getDislikes().size(), "success", success);
+    }
+
+    @GetMapping("/create")
+    public String getCreatePostForm(Model model) {
+        LOGGER.info("Received a GET request to url: /posts/create");
+
+        model.addAttribute("post", new Post());
+
+        return "posts/create";
+    }
+
+    @PostMapping
+    public String createPost(@RequestParam("title") String title, @RequestParam("tags") String tags,
+                             @RequestParam("content") String content, @AuthenticationPrincipal User user) {
+        LOGGER.info("Received a POST request to url: /posts");
+
+        Post post = new Post(user, null, title, content, LocalDate.now(), List.of(tags.split(" ")));
+        postService.save(post);
+
+        LOGGER.info("Success create new post");
+
+        return "redirect:/posts";
     }
 }

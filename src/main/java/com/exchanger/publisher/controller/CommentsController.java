@@ -59,7 +59,6 @@ public class CommentsController {
 
         model.addAttribute("postId", postId);
         model.addAttribute("postTitle", postService.findById(postId).getTitle());
-//        model.addAttribute("parentId", parentId);
         if (parentId != -1) {
             model.addAttribute("parentComment", new CommentDto(commentService.findById(parentId)));
         }
