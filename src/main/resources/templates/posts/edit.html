@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>Edit post</title>
+
+    <link rel="stylesheet" th:href="@{/styles/header.css}">
+    <link rel="stylesheet" th:href="@{/styles/general.css}">
+    <link rel="stylesheet" th:href="@{/styles/posts/post.css}">
+    <link rel="stylesheet" th:href="@{/styles/posts/create.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{header :: header}"></div>
+
+<form method="GET" th:action="@{/account}">
+    <input type="submit" value="Back" class="button" style="margin: 10px 0px 0px 10px">
+</form>
+
+<form th:method="PUT" th:action="@{/posts/{postId}(postId=${post.id})}" class="form">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" th:value="${post.title}" required>
+    
+    <label for="tags">Tags</label>
+    <input type="text" id="tags" name="tags" th:each="tag : ${post.tags}" th:value="${tag} + ' '">
+
+    <label for="content">Content</label>
+    <textarea id="content" name="content" th:text="${post.content}" required></textarea>
+
+    <button type="submit" class="button">Submit</button>
+</form>
+
+<form th:method="DELETE" th:action="@{/posts/{postId}(postId=${post.id})}">
+    <button type="submit" class="button">Delete post</button>
+</form>
+
+</body>
+</html>

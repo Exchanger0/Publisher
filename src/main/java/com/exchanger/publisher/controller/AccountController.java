@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/account")
 public class AccountController {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
 
     private final UserService userService;
     private final GroupService groupService;

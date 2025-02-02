@@ -24,7 +24,7 @@ public class CommentsController {
     private final CommentService commentService;
     private final PostService postService;
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(CommentsController.class);
 
     @Autowired
     public CommentsController(CommentService commentService, PostService postService) {

@@ -19,10 +19,10 @@
         <p class="title">Publisher</p>
         <form method="post" th:action="@{/login}">
             <label for="username">Username:</label>
-            <input type="text" name="username" id="username">
+            <input type="text" name="username" id="username" th:value="${username}">
 
             <label for="password">Password:</label>
-            <input type="password" name="password" id="password">
+            <input type="password" name="password" id="password" th:value="${password}">
 
             <input type="submit" value="Login" class="submit">
         </form>

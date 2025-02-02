@@ -40,6 +40,7 @@
             <ul class="post-list">
                 <li th:each="post : ${user.posts}">
                     <a th:text="${post.title}" th:href="@{/posts/{postId}(postId=${post.id})}">Post link</a>
+                    <a th:href="@{/posts/{postId}/edit(postId=${post.id})}">Edit</a>
                 </li>
             </ul>
         </div>
@@ -67,6 +68,9 @@
                 </li>
             </ul>
         </div>
+        <form method="GET" th:action="@{/logout}">
+            <input class="button" type="submit" name="delete" value="Logout">
+        </form>
         <form th:method="DELETE" th:action="@{/account}">
             <input class="button" type="submit" name="delete" value="Delete account">
         </form>

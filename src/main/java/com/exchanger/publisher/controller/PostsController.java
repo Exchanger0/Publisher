@@ -29,7 +29,7 @@ public class PostsController {
     private final DislikeService dislikeService;
     private final ViewsService viewsService;
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(PostsController.class);
 
     @Autowired
     public PostsController(PostService postService, LikeService likeService, DislikeService dislikeService,
@@ -137,5 +137,43 @@ public class PostsController {
         LOGGER.info("Success create new post");
 
         return "redirect:/posts";
+    }
+
+    @GetMapping("/{postId}/edit")
+    public String getEditPostForm(Model model, @PathVariable("postId") long postId, @AuthenticationPrincipal User user) {
+        LOGGER.info("Received a GET request to url: /posts/{}/edit", postId);
+
+        Post post = postService.findById(postId);
+        if (post.getAuthor().equals(user)) {
+            model.addAttribute("post", new PostDto(post));
+            return "posts/edit";
+        }else {
+            model.addAttribute("message", "Access denied");
+            return "error";
+        }
+    }
+
+    @PutMapping("/{postId}")
+    public String updatePost(@PathVariable("postId") long postId, @RequestParam("title") String title,
+                             @RequestParam("tags") String tags,
+                             @RequestParam("content") String content) {
+        LOGGER.info("Received a PUT request to url: /posts/{}", postId);
+
+        Post post = postService.findById(postId);
+        post.setTitle(title);
+        post.setTags(List.of(tags.split(" ")));
+        post.setContent(content);
+        postService.save(post);
+
+        return "redirect:/account";
+    }
+
+    @DeleteMapping("/{postId}")
+    public String deletePost(@PathVariable("postId") long postId) {
+        LOGGER.info("Received a DELETE request to url: /posts/{}", postId);
+
+        postService.deleteById(postId);
+
+        return "redirect:/account";
     }
 }
