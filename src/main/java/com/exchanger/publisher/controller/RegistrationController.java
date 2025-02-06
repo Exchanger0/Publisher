@@ -37,7 +37,7 @@ public class RegistrationController {
         LOGGER.info("Received a GET request to url: /registration");
 
         model.addAttribute("error", error);
-        return "registration";
+        return "auth/registration";
     }
 
     @PostMapping

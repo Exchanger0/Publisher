@@ -37,7 +37,7 @@ public class AccountController {
                 groupService.findAllByCreatorId(user.getId())
         ));
 
-        return "account";
+        return "account/account";
     }
 
     @PutMapping

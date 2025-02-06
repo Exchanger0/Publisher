@@ -21,6 +21,10 @@ public class PostDto {
     private long likes;
     private long dislikes;
 
+    public PostDto() {
+
+    }
+
     public PostDto(long id, User author, Group group, String title, String content, LocalDate creationDate, List<String> tags, long views, long likes, long dislikes) {
         this.id = id;
         this.author = author;

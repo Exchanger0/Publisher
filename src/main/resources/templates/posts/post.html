@@ -6,8 +6,8 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>Post</title>
 
-    <link rel="stylesheet" th:href="@{/styles/header.css}">
-    <link rel="stylesheet" th:href="@{/styles/general.css}">
+    <link rel="stylesheet" th:href="@{/styles/main/header.css}">
+    <link rel="stylesheet" th:href="@{/styles/main/main.css}">
     <link rel="stylesheet" th:href="@{/styles/posts/post.css}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +19,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{header :: header}"></div>
+<div th:replace="~{main/header :: header}"></div>
 
 <form method="GET" th:action="@{/posts}">
     <input type="submit" value="Back" class="button" style="margin: 10px 0px 0px 10px">
@@ -35,7 +35,7 @@
     </p>
     <p class="creation-date">Creation date: <span th:text="${post.creationDate}"></span></p>
     <p>Tags: <span th:each="tag : ${post.tags}" th:text="${tag} " style="margin-right: 5px;"></span></p>
-    <p th:text="${post.content}">Content</p>
+    <p th:text="${post.content}" class="break-line">Content</p>
     <div class="stats">
         <span th:text="|${post.likes} likes|" class="like" th:classappend="${liked ? 'active' : ''}"></span>
         <span th:text="|${post.dislikes} dislikes|" class="dislike" th:classappend="${disliked ? 'active' : ''}"></span> 

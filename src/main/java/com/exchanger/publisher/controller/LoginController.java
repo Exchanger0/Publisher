@@ -23,6 +23,6 @@ public class LoginController {
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         model.addAttribute("error", error);
-        return "login";
+        return "auth/login";
     }
 }

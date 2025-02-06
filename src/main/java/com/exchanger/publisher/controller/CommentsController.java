@@ -5,7 +5,6 @@ import com.exchanger.publisher.model.Comment;
 import com.exchanger.publisher.model.User;
 import com.exchanger.publisher.service.CommentService;
 import com.exchanger.publisher.service.PostService;
-import org.apache.juli.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

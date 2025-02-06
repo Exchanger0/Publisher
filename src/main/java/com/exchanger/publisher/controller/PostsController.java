@@ -7,6 +7,7 @@ import com.exchanger.publisher.model.User;
 import com.exchanger.publisher.model.key.LDVID;
 import com.exchanger.publisher.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,9 @@ public class PostsController {
         LOGGER.info("Received a GET request to url: /posts/{}", postId);
 
         Post post = postService.findById(postId);
+        if (post == null) {
+            throw new EntityNotFoundException("Post with id=" + postId + " not found");
+        }
 
         boolean liked = false;
         boolean disliked = false;
