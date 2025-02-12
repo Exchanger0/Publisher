@@ -33,6 +33,16 @@ public class PostService extends BaseService<Post, Long, PostRepo> {
         return repository.findAll(pageable);
     }
 
+    @Transactional(readOnly = true)
+    public List<Post> findAllByTitleOrTags(String q) {
+        return repository.findAllByTitleOrTag(q);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Post> findAllByTitleOrTags(String q, Pageable pageable) {
+        return repository.findAllByTitleOrTag(q, pageable);
+    }
+
     public void refresh(Post post) {
         entityManager.refresh(post);
     }

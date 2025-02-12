@@ -1,4 +1,11 @@
-const container = document.querySelector(".posts")
+let isSearchReq = sessionStorage.getItem("isSearchReq");
+if (isSearchReq == null) {
+	isSearchReq = false;
+}else {
+	isSearchReq = (isSearchReq.toLowerCase() === "true");
+}
+console.log(isSearchReq);
+
 let next = sessionStorage.getItem("next");
 if (next == null) {
 	next = 1;
@@ -6,6 +13,45 @@ if (next == null) {
 	next = parseInt(next);
 }
 console.log(next);
+
+const container = document.querySelector(".posts")
+let searchField = document.querySelector("#search-field");
+let searchBtn = document.querySelector("#search-btn");
+let cancelBtn = document.querySelector("#cancel-btn");
+
+searchBtn.addEventListener("click", () => {
+	console.log("start search");
+	isSearchReq = true;
+	next = 0;
+	get({start: next, q: searchField.value}).then(posts => {
+		container.replaceChildren();
+		if (posts.length != 0) {
+			addPosts(posts);
+			next += 1;
+		}
+	});
+});
+cancelBtn.addEventListener("click", () => {
+	isSearchReq = false;
+	next = 0;
+	searchField.value = "";
+	get({start: next}).then(posts => {
+		container.replaceChildren();
+		if (posts.length != 0) {
+			addPosts(posts);
+			next += 1;
+		}
+	});
+})
+
+let q = sessionStorage.getItem("q");
+if (q == null) {
+	q = "";
+}
+searchField.value = q;
+
+
+load();
 
 // создает html элементы для представления поста
 function createPostHtml(postObj) {
@@ -49,42 +95,69 @@ function createPostHtml(postObj) {
 	return post;
 }
 
-//получает страницу постов и создает для каждого html представлеение
-async function get(start) {
-	let response = await fetch("/publisher/posts/data?start=" + start);
+//получает посты
+async function get(requestParams) {
+	const queryString = new URLSearchParams(requestParams).toString();
+	console.log("get requestParams=" + requestParams);
+	let response = await fetch(`/publisher/posts/data?${queryString}`);
 	let posts = await response.json();
 
+	return posts;
+}
+
+//добавление постов на страницу
+function addPosts(posts) {
 	for(let post of posts) {
 		container.appendChild(createPostHtml(post))
 	}
-
-	console.log("end start=" + start);
 }
 
 //загружает все посты с предыдущей сессии
 async function load() {
+	console.log("start load")
 	for(let i = 0; i < next; i++) {
 		console.log("get page with index=" + i);
-		await get(i);
+		let requestParams;
+		if (isSearchReq) {
+			requestParams = {start: i, q: searchField.value};
+		}else {
+			requestParams = {start: i};
+		}
+		let posts = await get(requestParams);
+		addPosts(posts);
 	}
 	//установление предыдущего скролла
 	const scrollPosition = sessionStorage.getItem("scrollPosition");
 	if (scrollPosition) {
 	    window.scrollTo(0, parseFloat(scrollPosition));
 	}
+	console.log("end load");
 }
-
-load();
 
 //получение следующей страницы постов
 document.querySelector("#load-btn").addEventListener("click", () => {
 	console.log("get page with index=" + next);
-	get(next);
-	next += 1;
+	let requestParams;
+	if (isSearchReq) {
+		requestParams = {start: next, q: searchField.value};
+	}else {
+		requestParams = {start: next};
+	}
+	let promise = get(requestParams);
+	promise.then(posts => {
+		if (posts.length != 0) {
+			addPosts(posts);
+			next += 1;
+		}	
+	});
 });
 
 //сохранение текущего положения скоролла и индекса следующей страницы
 window.addEventListener("beforeunload", function () {
     sessionStorage.setItem("scrollPosition", window.scrollY);
     sessionStorage.setItem("next", next);
+    sessionStorage.setItem("isSearchReq", isSearchReq);
+    if (isSearchReq) {
+    	sessionStorage.setItem("q", searchField.value);
+	}
 });

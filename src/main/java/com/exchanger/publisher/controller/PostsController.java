@@ -6,7 +6,6 @@ import com.exchanger.publisher.model.Post;
 import com.exchanger.publisher.model.User;
 import com.exchanger.publisher.model.key.LDVID;
 import com.exchanger.publisher.service.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,12 +49,18 @@ public class PostsController {
 
     @GetMapping("/data")
     @ResponseBody
-    public List<PostMainData> getPostsData(@RequestParam(value = "start", required = false, defaultValue = "0") int start,
-                             @RequestParam(value = "amount", required = false, defaultValue = "20") int amount) throws JsonProcessingException {
+    public List<PostMainData> getPostsData(
+            @RequestParam(value = "start", required = false, defaultValue = "0") int start,
+            @RequestParam(value = "amount", required = false, defaultValue = "20") int amount,
+            @RequestParam(value = "q", required = false, defaultValue = "__none__") String q) {
         LOGGER.info("Received a GET request to url: /posts/data");
-        LOGGER.info("start={}, amount={}", start, amount);
+        LOGGER.info("start={}, amount={}, q={}", start, amount, q);
 
-        List<Post> posts = postService.findAll(PageRequest.of(start, amount));
+        List<Post> posts;
+        if (!q.isEmpty() && !q.equals("__none__"))
+            posts = postService.findAllByTitleOrTags(q, PageRequest.of(start, amount));
+        else
+            posts = postService.findAll(PageRequest.of(start, amount));
 
         return posts.stream().map(PostMainData::new).toList();
     }
@@ -151,7 +156,7 @@ public class PostsController {
         if (post.getAuthor().equals(user)) {
             model.addAttribute("post", new PostDto(post));
             return "posts/edit";
-        }else {
+        } else {
             model.addAttribute("message", "Access denied");
             return "error";
         }

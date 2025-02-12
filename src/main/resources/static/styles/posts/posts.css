@@ -9,12 +9,12 @@ body {
 }
 
 .posts {
-	padding: 20px;
-	cursor: pointer;
+	width: 100%;
 }
 
 .post {
 	padding: 10px;
+	cursor: pointer;
 }
 
 .content {

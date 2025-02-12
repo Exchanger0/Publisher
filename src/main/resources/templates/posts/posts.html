@@ -19,6 +19,11 @@
 <div th:replace="~{main/header :: header}"></div>
 
 <div class="main">
+    <div style="margin-top: 10px;">
+        <input type="text" id="search-field">
+        <button id="search-btn" class="button">Search</button>
+        <button id="cancel-btn" class="button">Cancel</button>
+    </div>
     <div class="posts"></div>
     <button id="load-btn" class="button">Load more</button>
 </div>
