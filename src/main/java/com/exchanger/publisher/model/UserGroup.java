@@ -1,44 +1,41 @@
 package com.exchanger.publisher.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.exchanger.publisher.model.key.UserGroupId;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "user_group")
 public class UserGroup {
-    @Id
-    @Column(name = "user_id")
-    private long userId;
-    @Id
-    @Column(name = "group_id")
-    private long groupId;
+    @EmbeddedId
+    private UserGroupId id;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private UserRole role;
 
     public UserGroup() {
     }
 
-    public UserGroup(long userId, long groupId) {
-        this.userId = userId;
-        this.groupId = groupId;
+    public UserGroup(long userId, long groupId, UserRole role) {
+        id = new UserGroupId(userId, groupId);
+        this.role = role;
     }
 
-    public long getUserId() {
-        return userId;
+    public UserGroupId getId() {
+        return id;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setId(UserGroupId id) {
+        this.id = id;
     }
 
-    public long getGroupId() {
-        return groupId;
+    public UserRole getRole() {
+        return role;
     }
 
-    public void setGroupId(long groupId) {
-        this.groupId = groupId;
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     @Override
@@ -46,11 +43,11 @@ public class UserGroup {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserGroup userGroup = (UserGroup) o;
-        return userId == userGroup.userId && groupId == userGroup.groupId;
+        return Objects.equals(id, userGroup.id) && role == userGroup.role;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, groupId);
+        return Objects.hash(id, role);
     }
 }

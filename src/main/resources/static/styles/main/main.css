@@ -15,3 +15,11 @@
 .break-line {
     white-space: pre-line;
 }
+
+.link {
+    color: #00ADB5;
+}
+
+.link:visited {
+    color: #008187;
+}

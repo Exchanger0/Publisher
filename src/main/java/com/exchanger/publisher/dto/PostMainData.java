@@ -1,11 +1,8 @@
 package com.exchanger.publisher.dto;
 
-import com.exchanger.publisher.model.Group;
 import com.exchanger.publisher.model.Post;
-import com.exchanger.publisher.model.User;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 
 public class PostMainData {

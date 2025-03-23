@@ -36,7 +36,7 @@
             </p>
             <ul class="post-list">
                 <li th:each="post : ${user.posts}">
-                    <a th:text="${post.title}" th:href="@{/posts/{postId}(postId=${post.id})}">Post link</a>
+                    <a class="link" th:text="${post.title}" th:href="@{/posts/{postId}(postId=${post.id})}">Post link</a>
                 </li>
             </ul>
         </div>
@@ -48,7 +48,7 @@
             </p>
             <ul class="group-list">
                 <li th:each="group : ${user.groups}">
-                    <a th:text="${group.name}" th:href="@{/groups/{groupId}(groupId=${group.id})}">Group link</a>
+                    <a class="link" th:text="${group.name}" th:href="@{/groups/{groupId}(groupId=${group.id})}">Group link</a>
                 </li>
             </ul>
         </div>
@@ -60,7 +60,7 @@
             </p>
             <ul class="created-group-list">
                 <li th:each="group : ${user.createdGroups}">
-                    <a th:text="${group.name}" th:href="@{/groups/{groupId}(groupId=${group.id})}">Group link</a>
+                    <a class="link" th:text="${group.name}" th:href="@{/groups/{groupId}(groupId=${group.id})}">Group link</a>
                 </li>
             </ul>
         </div>

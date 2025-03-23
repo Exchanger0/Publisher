@@ -52,15 +52,15 @@ public class PostsController {
     public List<PostMainData> getPostsData(
             @RequestParam(value = "start", required = false, defaultValue = "0") int start,
             @RequestParam(value = "amount", required = false, defaultValue = "20") int amount,
-            @RequestParam(value = "q", required = false, defaultValue = "__none__") String q) {
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "groupId", required = false) Integer groupId) {
         LOGGER.info("Received a GET request to url: /posts/data");
-        LOGGER.info("start={}, amount={}, q={}", start, amount, q);
+        LOGGER.info("start={}, amount={}, title={}, tag={}, groupId={}", start, amount, title, tag, groupId);
 
         List<Post> posts;
-        if (!q.isEmpty() && !q.equals("__none__"))
-            posts = postService.findAllByTitleOrTags(q, PageRequest.of(start, amount));
-        else
-            posts = postService.findAll(PageRequest.of(start, amount));
+        posts = postService.findBy(title, tag, groupId, PageRequest.of(start, amount));
+        System.out.println("Posts: " + posts.size());
 
         return posts.stream().map(PostMainData::new).toList();
     }
@@ -83,7 +83,6 @@ public class PostsController {
             liked = post.getLikes().stream().anyMatch(like -> like.getId().getUserId() == user.getId());
             disliked = post.getDislikes().stream().anyMatch(dislike -> dislike.getId().getUserId() == user.getId());
         }
-
 
         model.addAttribute("post", new PostDto(post));
         model.addAttribute("liked", liked);

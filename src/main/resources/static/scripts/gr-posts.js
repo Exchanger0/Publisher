@@ -1,4 +1,4 @@
-let postsData = sessionStorage.getItem("postsData");
+let postsData = sessionStorage.getItem("grPostsData");
 console.log(postsData);
 if (postsData === null) {
 	postsData = {};
@@ -22,12 +22,14 @@ const container = document.querySelector(".posts");
 let searchField = document.querySelector("#search-field");
 let searchBtn = document.querySelector("#search-btn");
 let cancelBtn = document.querySelector("#cancel-btn");
+const groupId = parseInt(document.querySelector("#groupId").textContent);
 
 searchBtn.addEventListener("click", () => {
 	console.log("start search");
 	postsData.isSearchReq = true;
 	postsData.next = 0;
-	get({start: postsData.next, title: searchField.value, tag: searchField.value}).then(posts => {
+	get({start: postsData.next, title: searchField.value, tag: searchField.value, groupId: groupId})
+	.then(posts => {
 		container.replaceChildren();
 		if (posts.length != 0) {
 			addPosts(posts);
@@ -39,7 +41,7 @@ cancelBtn.addEventListener("click", () => {
 	postsData.isSearchReq = false;
 	postsData.next = 0;
 	searchField.value = "";
-	get({start: postsData.next}).then(posts => {
+	get({start: postsData.next, groupId: groupId}).then(posts => {
 		container.replaceChildren();
 		if (posts.length != 0) {
 			addPosts(posts);
@@ -119,9 +121,9 @@ async function load() {
 		console.log("get page with index=" + i);
 		let requestParams;
 		if (postsData.isSearchReq) {
-			requestParams = {start: i, title: searchField.value, tag: searchField.value};
+			requestParams = {start: i, title: searchField.value, tag: searchField.value, groupId: groupId};
 		}else {
-			requestParams = {start: i};
+			requestParams = {start: i, groupId: groupId};
 		}
 		let posts = await get(requestParams);
 		addPosts(posts);
@@ -138,9 +140,9 @@ document.querySelector("#load-btn").addEventListener("click", () => {
 	console.log("get page with index=" + postsData.next);
 	let requestParams;
 	if (postsData.isSearchReq) {
-		requestParams = {start: postsData.next, title: searchField.value, tag: searchField.value};
+		requestParams = {start: postsData.next, title: searchField.value, tag: searchField.value, groupId: groupId};
 	}else {
-		requestParams = {start: postsData.next};
+		requestParams = {start: postsData.next, groupId: groupId};
 	}
 	let promise = get(requestParams);
 	promise.then(posts => {
@@ -158,5 +160,5 @@ window.addEventListener("beforeunload", function () {
     if (postsData.isSearchReq) {
     	postsData.q = searchField.value;
 	}
-	sessionStorage.setItem("postsData", JSON.stringify(postsData));
+	sessionStorage.setItem("grPostsData", JSON.stringify(postsData));
 });

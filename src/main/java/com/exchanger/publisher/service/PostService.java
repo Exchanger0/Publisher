@@ -1,5 +1,6 @@
 package com.exchanger.publisher.service;
 
+import com.exchanger.publisher.jpa.PostSpecification;
 import com.exchanger.publisher.model.Post;
 import com.exchanger.publisher.repository.PostRepo;
 import jakarta.persistence.EntityManager;
@@ -7,6 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,13 +36,9 @@ public class PostService extends BaseService<Post, Long, PostRepo> {
     }
 
     @Transactional(readOnly = true)
-    public List<Post> findAllByTitleOrTags(String q) {
-        return repository.findAllByTitleOrTag(q);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Post> findAllByTitleOrTags(String q, Pageable pageable) {
-        return repository.findAllByTitleOrTag(q, pageable);
+    public List<Post> findBy(String title, String tag, Integer groupId, Pageable pageable) {
+        Specification<Post> spec = PostSpecification.filterByCriteria(title, tag, groupId);
+        return repository.findAll(spec, pageable).toList();
     }
 
     public void refresh(Post post) {

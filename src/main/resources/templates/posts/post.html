@@ -28,7 +28,7 @@
 <div class="post">
     <p class="title" th:text="${post.title}">Title</p>
     <p>Author:
-        <a class="text-button" th:text="${post.author.username}" th:href="@{/users/{userId}(userId=${post.author.id})}">User link</a>
+        <a class="link" th:text="${post.author.username}" th:href="@{/users/{userId}(userId=${post.author.id})}">User link</a>
     </p>
     <p th:if="${post.group} != null">Group:
         <a class="text-button" th:text="${post.group.name}" th:href="@{/groups/{groupId}(groupId=${post.group.id})}">Group link</a>

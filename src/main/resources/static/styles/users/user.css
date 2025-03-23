@@ -59,11 +59,3 @@
 li {
 	padding: 5px 0px;
 }
-
-li a {
-	color: #00ADB5;
-}
-
-li a:visited {
-	color: #008187;
-}

@@ -11,8 +11,8 @@ import java.util.Objects;
 public class PostDto {
 
     private long id;
-    private User author;
-    private Group group;
+    private UserDto author;
+    private GroupDto group;
     private String title;
     private String content;
     private LocalDate creationDate;
@@ -21,11 +21,8 @@ public class PostDto {
     private long likes;
     private long dislikes;
 
-    public PostDto() {
 
-    }
-
-    public PostDto(long id, User author, Group group, String title, String content, LocalDate creationDate, List<String> tags, long views, long likes, long dislikes) {
+    public PostDto(long id, UserDto author, GroupDto group, String title, String content, LocalDate creationDate, List<String> tags, long views, long likes, long dislikes) {
         this.id = id;
         this.author = author;
         this.group = group;
@@ -39,8 +36,10 @@ public class PostDto {
     }
 
     public PostDto(Post post) {
-        this(post.getId(), post.getAuthor(), post.getGroup(), post.getTitle(), post.getContent(), post.getCreationDate(),
-                post.getTags(), post.getViews().size(), post.getLikes().size(), post.getDislikes().size());
+        this(post.getId(), new UserDto(post.getAuthor(), false),
+                post.getGroup() != null ? new GroupDto(post.getGroup(), null, false) : null,
+                post.getTitle(), post.getContent(), post.getCreationDate(), post.getTags(),
+                post.getViews().size(), post.getLikes().size(), post.getDislikes().size());
     }
 
     public long getId() {
@@ -51,19 +50,19 @@ public class PostDto {
         this.id = id;
     }
 
-    public User getAuthor() {
+    public UserDto getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(UserDto author) {
         this.author = author;
     }
 
-    public Group getGroup() {
+    public GroupDto getGroup() {
         return group;
     }
 
-    public void setGroup(Group group) {
+    public void setGroup(GroupDto group) {
         this.group = group;
     }
 

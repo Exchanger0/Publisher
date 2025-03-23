@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>Group</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" th:href="@{/styles/main/header.css}">
+    <link rel="stylesheet" th:href="@{/styles/main/main.css}">
+    <link rel="stylesheet" th:href="@{/styles/groups/group.css}">
+    <link rel="stylesheet" th:href="@{/styles/posts/posts.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{main/header :: header}"></div>
+
+<form method="GET" th:action="@{/groups}">
+    <input type="submit" value="Back" class="button" style="margin: 10px 0px 0px 10px">
+</form>
+
+<div class="group">
+    <p id="groupId" style="display: none;" th:text="${group.id}">Group id</p>
+    <p class="title" th:text="${group.name}">Name</p>
+    <p>Creator:
+        <a class="link" th:text="${group.creator.username}" th:href="@{/users/{userId}(userId=${group.creator.id})}">User link</a>
+    </p>
+    <p th:text="${group.description}" class="break-line">Description</p>
+    
+    <div class="container mt-4 px-0 mx-0">
+        <!-- Навигация по вкладкам -->
+        <ul class="nav nav-pills w-100" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts" type="button" role="tab">Posts</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="members-tab" data-bs-toggle="tab" data-bs-target="#members" type="button" role="tab">Members</button>
+            </li>
+        </ul>
+
+        <!-- Содержимое вкладок -->
+        <div class="tab-content mt-3" id="myTabContent">
+            <div class="tab-pane fade show active" id="posts" role="tabpanel">
+                <div class="main">
+                    <div style="margin-top: 10px;">
+                        <input type="text" id="search-field">
+                        <button id="search-btn" class="button">Search</button>
+                        <button id="cancel-btn" class="button">Cancel</button>
+                    </div>
+                    <div class="posts"></div>
+                    <button id="load-btn" class="button">Load more</button>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="members" role="tabpanel">
+                <ul th:each="member : ${group.members}">
+                    <li><a class="link" th:href="@{/users/{userId}(userId=${member.id})}" th:text="${member.username} + ' [' + ${member.role} + ']'">Member link</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" th:src="@{/scripts/gr-posts.js}"></script>
+<!-- <script type="text/javascript" th:src="@{/scripts/post.js}"></script> -->
+</body>
+</html>

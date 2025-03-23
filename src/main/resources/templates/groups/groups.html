@@ -2,30 +2,31 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-
+    <title>Groups</title>
     <link rel="stylesheet" th:href="@{/styles/main/header.css}">
+    <link rel="stylesheet" th:href="@{/styles/main/main.css}">
+    <link rel="stylesheet" th:href="@{/styles/groups/groups.css}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
-
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
-<header th:fragment="header">
-    <div class="title-parent">
-        <p class="title">Publisher</p>
+<div th:replace="~{main/header :: header}"></div>
+
+<div class="main">
+    <div style="margin-top: 10px;">
+        <input type="text" id="search-field">
+        <button id="search-btn" class="button">Search</button>
+        <button id="cancel-btn" class="button">Cancel</button>
     </div>
-    <div>
-        <a class="a-btn" th:href="@{/posts}">Posts</a>
-        <a class="a-btn" th:href="@{/groups}">Groups</a>
-        <a class="a-btn" th:href="@{/posts/create}">Create post</a>
-    </div>
-    <div class="account">
-        <a class="a-btn" th:href="@{/account}">Account</a>
-    </div>
-</header>
+    <div class="groups"></div>
+    <button id="load-btn" class="button">Load more</button>
+</div>
+<script type="text/javascript" th:src="@{/scripts/groups.js}"></script>
 </body>
 </html>
