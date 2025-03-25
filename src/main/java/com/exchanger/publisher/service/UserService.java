@@ -18,7 +18,7 @@ import java.util.stream.StreamSupport;
 @Transactional(propagation = Propagation.REQUIRED)
 public class UserService extends BaseService<User, Long, UserRepo> {
 
-    private PostService postService;
+    private final PostService postService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -44,7 +44,7 @@ public class UserService extends BaseService<User, Long, UserRepo> {
 
         //удаление записи о том, что пользователь член этой группы, созданной пользователем
         session.createMutationQuery("""
-                DELETE UserGroup ug WHERE ug.groupId IN (
+                DELETE UserGroup ug WHERE ug.id.groupId IN (
                     SELECT gr.id FROM Group gr WHERE gr.creator.id in :ids
                 )
                 """)
@@ -52,7 +52,7 @@ public class UserService extends BaseService<User, Long, UserRepo> {
                 .executeUpdate();
         //удаление записи о том, что пользователь является членом какой-либо группы
         session.createMutationQuery("""
-                DELETE UserGroup ug WHERE ug.userId in :ids
+                DELETE UserGroup ug WHERE ug.id.userId in :ids
                 """)
                 .setParameter("ids", ids)
                 .executeUpdate();

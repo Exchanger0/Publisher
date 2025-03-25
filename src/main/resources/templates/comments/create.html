@@ -23,17 +23,18 @@
         <p class="title">Comment</p>
         <div style="margin-bottom: 10px;" сlass="to">
             <h3>To post</h3>
-            <p th:text="${postTitle}">Post title</p>
+            <p th:text="${comment.post.title}">Post title</p>
         </div>
-        <div style="margin-bottom: 10px;" th:if="${parentComment != null}" class="to">
+        <div style="margin-bottom: 10px;" th:if="${comment.parent != null}" class="to">
             <h3>To comment</h3>
-            <p th:text="${parentComment.authorUsername}">Author username</p>
-            <p th:text="${parentComment.content}">Comment content</p>
+            <p th:text="${comment.parent.author.username}">Author username</p>
+            <p th:text="${comment.parent.content}">Comment content</p>
         </div>
-        <form method="POST" th:action="@{/comments}" class="form">
-            <input type="hidden" name="postId" th:value="${postId}">
-            <input th:if="${parentComment != null}" type="hidden" name="parentId" th:value="${parentComment.id}">
-            <textarea name="content" cols="40" rows="10" style="resize: none;"></textarea>
+        <form method="POST" th:action="@{/comments}" class="form" th:object="${comment}">
+            <input type="hidden" th:field="*{post.id}" />
+            <input type="hidden" th:if="${comment.parent != null}" th:field="*{parent.id}" />
+
+            <textarea name="content" cols="40" rows="10" style="resize: none;" th:field="*{content}"></textarea>
             <input type="submit" value="Submit" class="button">
         </form>
     </div>

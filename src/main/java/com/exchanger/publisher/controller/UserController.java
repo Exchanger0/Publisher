@@ -1,6 +1,6 @@
 package com.exchanger.publisher.controller;
 
-import com.exchanger.publisher.dto.AccountDto;
+import com.exchanger.publisher.dto.Account;
 import com.exchanger.publisher.service.GroupService;
 import com.exchanger.publisher.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,7 +34,7 @@ public class UserController {
         if (!userService.existsById(userId)) {
             throw new EntityNotFoundException("User with id=" + userId + " not found");
         }
-        model.addAttribute("user", new AccountDto(
+        model.addAttribute("user", new Account(
                 userService.findByIdWithEntities(userId),
                 groupService.findAllByCreatorId(userId)
         ));

@@ -62,8 +62,8 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="members" role="tabpanel">
-                <ul th:each="member : ${group.members}">
-                    <li><a class="link" th:href="@{/users/{userId}(userId=${member.id})}" th:text="${member.username} + ' [' + ${member.role} + ']'">Member link</a></li>
+                <ul th:each="entry : ${group.members}">
+                    <li><a class="link" th:href="@{/users/{userId}(userId=${entry.key.id})}" th:text="${entry.key.username} + ' [' + ${entry.value} + ']'">Member link</a></li>
                 </ul>
             </div>
         </div>
@@ -72,6 +72,5 @@
 </div>
 
 <script type="text/javascript" th:src="@{/scripts/gr-posts.js}"></script>
-<!-- <script type="text/javascript" th:src="@{/scripts/post.js}"></script> -->
 </body>
 </html>

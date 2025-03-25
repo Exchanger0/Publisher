@@ -1,6 +1,8 @@
 package com.exchanger.publisher.controller;
 
-import com.exchanger.publisher.dto.CommentDto;
+import com.exchanger.publisher.dto.CommentFull;
+import com.exchanger.publisher.dto.CommentMini;
+import com.exchanger.publisher.dto.PostMini;
 import com.exchanger.publisher.model.Comment;
 import com.exchanger.publisher.model.User;
 import com.exchanger.publisher.service.CommentService;
@@ -31,10 +33,9 @@ public class CommentsController {
         this.postService = postService;
     }
 
-
     @GetMapping
     @ResponseBody
-    public List<CommentDto> getCommnetsByFieldId(
+    public List<CommentFull> getCommnetsByFieldId(
             @RequestParam(value = "start", required = false, defaultValue = "0") int start,
             @RequestParam(value = "amount", required = false, defaultValue = "20") int amount,
             @RequestParam("field") String field,
@@ -49,34 +50,33 @@ public class CommentsController {
             case "parentid" -> comments = commentService.findAllByParentId(id, PageRequest.of(start, amount));
         }
 
-        return comments.stream().map(CommentDto::new).toList();
+        return comments.stream().map(CommentFull::new).toList();
     }
 
     @GetMapping("/create")
     public String getCreateCommentForm(Model model, @RequestParam("postId") long postId, @RequestParam("parentId") long parentId) {
         LOGGER.info("Received a GET request to url: /comments/create?postId={}&parentId={}", postId, parentId);
 
-        model.addAttribute("postId", postId);
-        model.addAttribute("postTitle", postService.findById(postId).getTitle());
+        CommentFull newComment = new CommentFull();
+        newComment.setPost(new PostMini(postService.findById(postId)));
         if (parentId != -1) {
-            model.addAttribute("parentComment", new CommentDto(commentService.findById(parentId)));
+            newComment.setParent(new CommentMini(commentService.findById(parentId)));
         }
-
+        model.addAttribute("comment", newComment);
 
         return "comments/create";
     }
 
     @PostMapping
-    public String createComment(@RequestParam("postId") long postId,
-                                @RequestParam(value = "parentId", required = false, defaultValue = "-1") long parentId,
-                                @RequestParam("content") String content, @AuthenticationPrincipal User user) {
+    public String createComment(@ModelAttribute("comment") CommentFull commentDto, @AuthenticationPrincipal User user) {
         LOGGER.info("Received a POST request to url: /comments");
-        LOGGER.info("postId={} parentId={}", postId, parentId);
+        LOGGER.info("postId={} parentId={}", commentDto.getPost().getId(), commentDto.getParent() == null ? null : commentDto.getParent().getId());
 
-        Comment comment = new Comment(content, user, postService.findById(postId),
-                parentId == -1 ? null : commentService.findById(parentId));
+        Comment comment = new Comment(commentDto.getContent(), user,
+                postService.findById(commentDto.getPost().getId()),
+                commentDto.getParent() == null ? null : commentService.findById(commentDto.getParent().getId()));
         commentService.save(comment);
 
-        return "redirect:/posts/" + postId;
+        return "redirect:/posts/" + comment.getPost().getId();
     }
 }

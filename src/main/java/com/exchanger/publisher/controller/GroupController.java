@@ -1,8 +1,7 @@
 package com.exchanger.publisher.controller;
 
-import com.exchanger.publisher.dto.GroupDto;
-import com.exchanger.publisher.dto.PostDto;
-import com.exchanger.publisher.dto.UserForGroupDto;
+import com.exchanger.publisher.dto.GroupFull;
+import com.exchanger.publisher.dto.UserMini;
 import com.exchanger.publisher.model.*;
 import com.exchanger.publisher.repository.UserGroupRepo;
 import com.exchanger.publisher.service.GroupService;
@@ -11,14 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/groups")
@@ -43,7 +41,7 @@ public class GroupController {
 
     @GetMapping("/data")
     @ResponseBody
-    public List<GroupDto> getGroupsData(
+    public List<GroupFull> getGroupsData(
             @RequestParam(value = "start", required = false, defaultValue = "0") int start,
             @RequestParam(value = "amount", required = false, defaultValue = "20") int amount,
             @RequestParam(value = "q", required = false, defaultValue = "__none__") String q) {
@@ -56,7 +54,7 @@ public class GroupController {
         else
             groups = groupService.findAll(PageRequest.of(start, amount));
 
-        return groups.stream().map(group -> new GroupDto(group, null, false)).toList();
+        return groups.stream().map(group -> new GroupFull(group, null)).toList();
     }
 
     @GetMapping("/{groupId}")
@@ -68,15 +66,17 @@ public class GroupController {
             throw new EntityNotFoundException("Group with id=" + groupId + " not found");
         }
 
-        Map<Long, UserRole> userGroups = userGroupRepo.findAllByIdGroupId(groupId)
-                .stream()
-                .collect(Collectors.toMap(ug -> ug.getId().getUserId(), UserGroup::getRole));
-        List<UserForGroupDto> members = group.getMembers()
-                .stream()
-                .map(user -> new UserForGroupDto(user.getId(), user.getUsername(), userGroups.get(user.getId())))
-                .toList();
+        List<UserGroup> userGroups = userGroupRepo.findAllByIdGroupId(groupId);
+        Map<UserMini, UserRole> members = new HashMap<>();
+        for (UserGroup ug : userGroups) {
+            group.getMembers()
+                    .stream()
+                    .filter(u -> u.getId() == ug.getId().getUserId())
+                    .findFirst()
+                    .ifPresent(value -> members.put(new UserMini(value), ug.getRole()));
+        }
 
-        model.addAttribute("group", new GroupDto(group, members, true));
+        model.addAttribute("group", new GroupFull(group, members));
 
         return "groups/group";
     }

@@ -53,7 +53,7 @@ searchField.value = groupsData.q;
 
 load();
 
-// создает html элементы для представления поста
+// создает html элементы для представления группы
 function createGroupHtml(groupObj) {
 	let group = document.createElement("div");
 	group.classList.add("group");
@@ -81,7 +81,7 @@ function createGroupHtml(groupObj) {
 	return group;
 }
 
-//получает посты
+//получает группы
 async function get(requestParams) {
 	const queryString = new URLSearchParams(requestParams).toString();
 	console.log("get requestParams=" + requestParams);
@@ -91,14 +91,14 @@ async function get(requestParams) {
 	return groups;
 }
 
-//добавление постов на страницу
+//добавление групп на страницу
 function addGroups(groups) {
 	for(let group of groups) {
 		container.appendChild(createGroupHtml(group))
 	}
 }
 
-//загружает все посты с предыдущей сессии
+//загружает все группы с предыдущей сессии
 async function load() {
 	console.log("start load")
 	for(let i = 0; i < groupsData.next; i++) {
@@ -119,7 +119,7 @@ async function load() {
 	console.log("end load");
 }
 
-//получение следующей страницы постов
+//получение следующей страницы групп
 document.querySelector("#load-btn").addEventListener("click", () => {
 	console.log("get page with index=" + groupsData.next);
 	let requestParams;

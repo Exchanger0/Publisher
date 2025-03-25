@@ -1,7 +1,7 @@
 package com.exchanger.publisher.controller;
 
-import com.exchanger.publisher.dto.PostDto;
-import com.exchanger.publisher.dto.PostMainData;
+import com.exchanger.publisher.dto.PostFull;
+import com.exchanger.publisher.dto.PostMini;
 import com.exchanger.publisher.model.Post;
 import com.exchanger.publisher.model.User;
 import com.exchanger.publisher.model.key.LDVID;
@@ -49,7 +49,7 @@ public class PostsController {
 
     @GetMapping("/data")
     @ResponseBody
-    public List<PostMainData> getPostsData(
+    public List<PostMini> getPostsData(
             @RequestParam(value = "start", required = false, defaultValue = "0") int start,
             @RequestParam(value = "amount", required = false, defaultValue = "20") int amount,
             @RequestParam(value = "title", required = false) String title,
@@ -60,9 +60,8 @@ public class PostsController {
 
         List<Post> posts;
         posts = postService.findBy(title, tag, groupId, PageRequest.of(start, amount));
-        System.out.println("Posts: " + posts.size());
 
-        return posts.stream().map(PostMainData::new).toList();
+        return posts.stream().map(PostMini::new).toList();
     }
 
     @GetMapping("/{postId}")
@@ -84,7 +83,7 @@ public class PostsController {
             disliked = post.getDislikes().stream().anyMatch(dislike -> dislike.getId().getUserId() == user.getId());
         }
 
-        model.addAttribute("post", new PostDto(post));
+        model.addAttribute("post", new PostFull(post));
         model.addAttribute("liked", liked);
         model.addAttribute("disliked", disliked);
 
@@ -129,8 +128,6 @@ public class PostsController {
     public String getCreatePostForm(Model model) {
         LOGGER.info("Received a GET request to url: /posts/create");
 
-        model.addAttribute("post", new Post());
-
         return "posts/create";
     }
 
@@ -153,7 +150,7 @@ public class PostsController {
 
         Post post = postService.findById(postId);
         if (post.getAuthor().equals(user)) {
-            model.addAttribute("post", new PostDto(post));
+            model.addAttribute("post", new PostMini(post));
             return "posts/edit";
         } else {
             model.addAttribute("message", "Access denied");

@@ -64,7 +64,7 @@ function createAndAddCommentHtml(commentObj) {
 	comment.classList.add("comment");
 
 	let authorUsername = document.createElement("p");
-	authorUsername.textContent = commentObj.authorUsername;
+	authorUsername.textContent = commentObj.author.username;
 	let content = document.createElement("p");
 	content.textContent = commentObj.content;
 	let childContainer = document.createElement("div");
@@ -94,9 +94,11 @@ function createAndAddCommentHtml(commentObj) {
 
 	commentsMap.set(commentObj.id, comment);
 
-	if (commentsMap.has(commentObj.parentId)) {
-		let parent = commentsMap.get(commentObj.parentId);
-		parent.querySelector(".child-container").appendChild(comment);
+	if (commentObj.parent !== null) {
+		if (commentsMap.has(commentObj.parent.id)) {
+			let parent = commentsMap.get(commentObj.parent.id);
+			parent.querySelector(".child-container").appendChild(comment);
+		}
 	}else {
 		commentContainer.appendChild(comment);
 	}
@@ -107,6 +109,7 @@ let globalNext = 0;
 async function loadComments(field, id, start) {
 	let response = await fetch("/publisher/comments?start=" + start + "&field=" + field + "&id=" + id);
 	let comments = await response.json();
+	console.log(comments);
 	for (let commentObj of comments) {
 		commentObj.next = 0;
 		createAndAddCommentHtml(commentObj);
