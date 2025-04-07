@@ -36,6 +36,11 @@
         <a class="link" th:text="${group.creator.username}" th:href="@{/users/{userId}(userId=${group.creator.id})}">User link</a>
     </p>
     <p th:text="${group.description}" class="break-line">Description</p>
+    <div id="parent">
+        <p th:text="${member}"></p>
+        <button class="button" id="join-btn" th:style="${member == 'canJoin'} ? 'display: block' : 'display: none'">Join</button>
+        <button class="button" id="leave-btn" th:style="${member == 'member'} ? 'display: block' : 'display: none'">Leave</button>
+    </div>
     
     <div class="container mt-4 px-0 mx-0">
         <!-- Навигация по вкладкам -->
@@ -62,7 +67,7 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="members" role="tabpanel">
-                <ul th:each="entry : ${group.members}">
+                <ul th:each="entry : ${group.members}" id="members">
                     <li><a class="link" th:href="@{/users/{userId}(userId=${entry.key.id})}" th:text="${entry.key.username} + ' [' + ${entry.value} + ']'">Member link</a></li>
                 </ul>
             </div>
@@ -72,5 +77,6 @@
 </div>
 
 <script type="text/javascript" th:src="@{/scripts/gr-posts.js}"></script>
+<script type="text/javascript" th:src="@{/scripts/group.js}"></script>
 </body>
 </html>

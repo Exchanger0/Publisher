@@ -19,7 +19,6 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private String aboutMyself;
-    private List<String> roles;
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Post> posts;
     @ManyToMany(fetch = FetchType.LAZY)
@@ -31,11 +30,10 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String password, String aboutMyself, List<String> roles) {
+    public User(String username, String password, String aboutMyself) {
         this.username = username;
         this.password = password;
         this.aboutMyself = aboutMyself;
-        this.roles = roles;
     }
 
     @Override
@@ -60,7 +58,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(SimpleGrantedAuthority::new).toList();
+        return List.of();
     }
 
     public void setUsername(String username) {
@@ -93,14 +91,6 @@ public class User implements UserDetails {
 
     public void setAboutMyself(String aboutMyself) {
         this.aboutMyself = aboutMyself;
-    }
-
-    public List<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
     }
 
     public List<Post> getPosts() {
@@ -139,7 +129,6 @@ public class User implements UserDetails {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", aboutMyself='" + aboutMyself + '\'' +
-                ", roles='" + roles + '\'' +
                 '}';
     }
 }

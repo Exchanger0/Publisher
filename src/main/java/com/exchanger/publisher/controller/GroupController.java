@@ -3,13 +3,17 @@ package com.exchanger.publisher.controller;
 import com.exchanger.publisher.dto.GroupFull;
 import com.exchanger.publisher.dto.UserMini;
 import com.exchanger.publisher.model.*;
+import com.exchanger.publisher.model.key.UserGroupId;
 import com.exchanger.publisher.repository.UserGroupRepo;
 import com.exchanger.publisher.service.GroupService;
+import com.exchanger.publisher.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +27,15 @@ import java.util.Map;
 public class GroupController {
     private final GroupService groupService;
     private final UserGroupRepo userGroupRepo;
+    private final UserService userService;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(GroupController.class);
 
     @Autowired
-    public GroupController(GroupService groupService, UserGroupRepo userGroupRepo) {
+    public GroupController(GroupService groupService, UserGroupRepo userGroupRepo, UserService userService) {
         this.groupService = groupService;
         this.userGroupRepo = userGroupRepo;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -58,12 +64,20 @@ public class GroupController {
     }
 
     @GetMapping("/{groupId}")
-    public String getGroup(Model model, @PathVariable("groupId") long groupId) {
+    public String getGroup(Model model, @PathVariable("groupId") long groupId, @AuthenticationPrincipal User user) {
         LOGGER.info("Received a GET request to url: /groups/{}", groupId);
 
         Group group = groupService.findById(groupId);
         if (group == null) {
             throw new EntityNotFoundException("Group with id=" + groupId + " not found");
+        }
+
+        if (user != null) {
+            if (group.getMembers().contains(user)) {
+                model.addAttribute("member", "member");
+            } else {
+                model.addAttribute("member", "canJoin");
+            }
         }
 
         List<UserGroup> userGroups = userGroupRepo.findAllByIdGroupId(groupId);
@@ -79,5 +93,31 @@ public class GroupController {
         model.addAttribute("group", new GroupFull(group, members));
 
         return "groups/group";
+    }
+
+    @PostMapping("/{groupId}/join")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> join(@PathVariable("groupId") long groupId, @AuthenticationPrincipal User user) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "authError");
+        if (user != null) {
+            LOGGER.info("User(id={}) join to group(id={})", user.getId(), groupId);
+            userGroupRepo.save(new UserGroup(user.getId(), groupId, UserRole.READER));
+            response.put("status", "ok");
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{groupId}/exit")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> leave(@PathVariable("groupId") long groupId, @AuthenticationPrincipal User user) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "authError");
+        if (user != null) {
+            LOGGER.info("User(id={}) leave from group(id={})", user.getId(), groupId);
+            userGroupRepo.deleteById(new UserGroupId(user.getId(), groupId));
+            response.put("status", "ok");
+        }
+        return ResponseEntity.ok(response);
     }
 }

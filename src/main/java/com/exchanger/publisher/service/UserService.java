@@ -30,7 +30,7 @@ public class UserService extends BaseService<User, Long, UserRepo> {
     }
 
     public void save(String username, String password) {
-        save(new User(username, password, "", List.of("USER_ROLE")));
+        save(new User(username, password, ""));
     }
 
     @Transactional(readOnly = true)

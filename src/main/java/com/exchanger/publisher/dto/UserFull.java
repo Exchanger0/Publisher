@@ -8,7 +8,6 @@ public class UserFull extends UserMini{
     protected List<PostMini> posts;
     protected List<GroupMini> groups;
 
-
     public UserFull(long id, String username, String aboutMyself, List<PostMini> posts, List<GroupMini> groups) {
         super(id, username, aboutMyself);
         this.posts = posts;
