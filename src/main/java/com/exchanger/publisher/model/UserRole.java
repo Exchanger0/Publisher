@@ -1,5 +1,5 @@
 package com.exchanger.publisher.model;
 
 public enum UserRole {
-    ADMIN, WRITER, READER
+    CREATOR, ADMIN, WRITER, READER
 }

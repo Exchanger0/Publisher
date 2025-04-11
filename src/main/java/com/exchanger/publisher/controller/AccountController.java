@@ -33,8 +33,7 @@ public class AccountController {
         LOGGER.info("User id={}", user.getId());
 
         model.addAttribute("user", new Account(
-                userService.findByIdWithEntities(user.getId()),
-                groupService.findAllByCreatorId(user.getId())
+                userService.findByIdWithEntities(user.getId())
         ));
 
         return "account/account";

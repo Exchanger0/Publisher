@@ -1,7 +1,6 @@
 .main {
 	display: flex;
 	flex-direction: column;
-/*	justify-content: center;*/
 	align-items: center;
 
 	min-height: 100vh;
@@ -23,7 +22,6 @@
 	gap: 20px;
 	margin-top: 50px;
 
-	max-width: 50%;
 }
 
 .about {
@@ -48,14 +46,15 @@
 	gap: 20px;
 }
 
-.post-list,
-.group-list,
-.created-group-list {
-	display: none;
-	overflow-y: scroll;
-	max-height: 200px;
-}
-
 li {
 	padding: 5px 0px;
+}
+
+.nav-pills .nav-link {
+    color: gray;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #393e46;
+    color: white;
 }

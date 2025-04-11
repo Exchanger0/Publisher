@@ -132,7 +132,8 @@ public class PostsController {
     public String getCreatePostForm(Model model, @AuthenticationPrincipal User user) {
         LOGGER.info("Received a GET request to url: /posts/create");
 
-        List<UserGroup> userGroups = userGroupService.findAllByIdUserIdAndRoleIn(user.getId(), List.of(UserRole.ADMIN, UserRole.WRITER));
+        List<UserGroup> userGroups = userGroupService.findAllByIdUserIdAndRoleIn(user.getId(), List.of(UserRole.CREATOR
+                , UserRole.ADMIN, UserRole.WRITER));
         List<Group> groups = groupService.findAllById(userGroups.stream().map(ug -> ug.getId().getGroupId()).toList());
         model.addAttribute("groups", groups.stream().map(GroupMini::new).toList());
 

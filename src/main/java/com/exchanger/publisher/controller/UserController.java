@@ -35,8 +35,7 @@ public class UserController {
             throw new EntityNotFoundException("User with id=" + userId + " not found");
         }
         model.addAttribute("user", new Account(
-                userService.findByIdWithEntities(userId),
-                groupService.findAllByCreatorId(userId)
+                userService.findByIdWithEntities(userId)
         ));
 
         return "users/user";

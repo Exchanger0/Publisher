@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Account</title>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <link rel="stylesheet" th:href="@{/styles/main/header.css}">
     <link rel="stylesheet" th:href="@{/styles/main/main.css}">
     <link rel="stylesheet" th:href="@{/styles/users/user.css}">
@@ -28,45 +31,50 @@
             <p>About:</p>
             <p th:text="${user.aboutMyself}" class="break-line"></p>
         </div>
-        <div class="list-box">
-            <p>
-                Created posts: 
-                <span th:text="${user.posts.size()}"></span>
-                <button class="button show-posts">Show</button>
-            </p>
-            <ul class="post-list">
-                <li th:each="post : ${user.posts}">
-                    <a class="link" th:text="${post.title}" th:href="@{/posts/{postId}(postId=${post.id})}">Post link</a>
+        <div class="container mt-4 px-0 mx-0">
+            <ul class="nav nav-pills w-100" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts" type="button" role="tab">Posts (<span th:text="${user.posts.size()}"></span>)</button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="groups-tab" data-bs-toggle="tab" data-bs-target="#groups" type="button" role="tab">Groups (<span th:text="${user.groups.size()}"></span>)</button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="created-groups-tab" data-bs-toggle="tab" data-bs-target="#created-groups" type="button" role="tab">Created groups (<span th:text="${user.createdGroups.size()}"></span>)</button>
                 </li>
             </ul>
-        </div>
-        <div class="list-box">
-            <p>
-                Groups: 
-                <span th:text="${user.groups.size()}"></span>
-                <button class="button show-groups">Show</button>
-            </p>
-            <ul class="group-list">
-                <li th:each="group : ${user.groups}">
-                    <a class="link" th:text="${group.name}" th:href="@{/groups/{groupId}(groupId=${group.id})}">Group link</a>
-                </li>
-            </ul>
-        </div>
-        <div class="list-box">
-            <p>
-                Created groups: 
-                <span th:text="${user.createdGroups.size()}"></span>
-                <button class="button show-created-groups">Show</button>
-            </p>
-            <ul class="created-group-list">
-                <li th:each="group : ${user.createdGroups}">
-                    <a class="link" th:text="${group.name}" th:href="@{/groups/{groupId}(groupId=${group.id})}">Group link</a>
-                </li>
-            </ul>
+
+            <div class="tab-content mt-3" id="myTabContent">
+                <div class="tab-pane fade show active" id="posts" role="tabpanel">
+                   <ul class="post-list">
+                        <li th:each="post : ${user.posts}">
+                            <a class="link" th:text="${post.title}" th:href="@{/posts/{postId}(postId=${post.id})}">Post link</a>
+                            <a class="link" th:href="@{/posts/{postId}/edit(postId=${post.id})}">Edit</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tab-pane fade" id="groups" role="tabpanel">
+                    <ul class="group-list">
+                        <li th:each="group : ${user.groups}">
+                            <a class="link" th:text="${group.name}" th:href="@{/groups/{groupId}(groupId=${group.id})}">Group link</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tab-pane fade" id="created-groups" role="tabpanel">
+                    <ul class="created-group-list">
+                        <li th:each="group : ${user.createdGroups}">
+                            <a class="link" th:text="${group.name}" th:href="@{/groups/{groupId}(groupId=${group.id})}">Group link</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<script type="text/javascript" th:src="@{/scripts/user.js}"></script>
 </body>
 </html>
