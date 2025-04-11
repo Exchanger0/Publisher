@@ -26,6 +26,16 @@
         <label for="tags">Tags</label>
         <input type="text" id="tags" name="tags" placeholder="Enter tags" required>
 
+        <label for="group">For group</label>
+        <select id="group" name="group">
+            <option value="-1">None</option>
+            <div th:each="group : ${groups}">
+                <option th:value="${group.id}">
+                    <a th:href="@{/groups/{groupId}(groupId=${group.id})}" th:text="${group.name}">Group name</a>
+                </option>
+            </div>
+        </select>
+
         <label for="content">Content</label>
         <textarea id="content" name="content" placeholder="Enter content" required></textarea>
 

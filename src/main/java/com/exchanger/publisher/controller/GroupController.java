@@ -4,8 +4,8 @@ import com.exchanger.publisher.dto.GroupFull;
 import com.exchanger.publisher.dto.UserMini;
 import com.exchanger.publisher.model.*;
 import com.exchanger.publisher.model.key.UserGroupId;
-import com.exchanger.publisher.repository.UserGroupRepo;
 import com.exchanger.publisher.service.GroupService;
+import com.exchanger.publisher.service.UserGroupService;
 import com.exchanger.publisher.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -26,13 +26,13 @@ import java.util.Map;
 @RequestMapping("/groups")
 public class GroupController {
     private final GroupService groupService;
-    private final UserGroupRepo userGroupRepo;
+    private final UserGroupService userGroupRepo;
     private final UserService userService;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(GroupController.class);
 
     @Autowired
-    public GroupController(GroupService groupService, UserGroupRepo userGroupRepo, UserService userService) {
+    public GroupController(GroupService groupService, UserGroupService userGroupRepo, UserService userService) {
         this.groupService = groupService;
         this.userGroupRepo = userGroupRepo;
         this.userService = userService;

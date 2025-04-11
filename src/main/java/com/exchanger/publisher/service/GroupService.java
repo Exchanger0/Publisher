@@ -14,9 +14,12 @@ import java.util.List;
 @Transactional(propagation = Propagation.REQUIRED)
 public class GroupService extends BaseService<Group, Long, GroupRepo> {
 
+    private final UserGroupService userGroupRepo;
+
     @Autowired
-    public GroupService(GroupRepo repository) {
+    public GroupService(GroupRepo repository, UserGroupService userGroupRepo) {
         super(repository);
+        this.userGroupRepo = userGroupRepo;
     }
 
     @Transactional(readOnly = true)

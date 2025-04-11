@@ -1,9 +1,9 @@
 package com.exchanger.publisher.controller;
 
+import com.exchanger.publisher.dto.GroupMini;
 import com.exchanger.publisher.dto.PostFull;
 import com.exchanger.publisher.dto.PostMini;
-import com.exchanger.publisher.model.Post;
-import com.exchanger.publisher.model.User;
+import com.exchanger.publisher.model.*;
 import com.exchanger.publisher.model.key.LDVID;
 import com.exchanger.publisher.service.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,16 +28,20 @@ public class PostsController {
     private final LikeService likeService;
     private final DislikeService dislikeService;
     private final ViewsService viewsService;
+    private final UserGroupService userGroupService;
+    private final GroupService groupService;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PostsController.class);
 
     @Autowired
     public PostsController(PostService postService, LikeService likeService, DislikeService dislikeService,
-                           ViewsService viewsService) {
+                           ViewsService viewsService, UserGroupService userGroupService, GroupService groupService) {
         this.postService = postService;
         this.likeService = likeService;
         this.dislikeService = dislikeService;
         this.viewsService = viewsService;
+        this.userGroupService = userGroupService;
+        this.groupService = groupService;
     }
 
     @GetMapping
@@ -125,18 +129,24 @@ public class PostsController {
     }
 
     @GetMapping("/create")
-    public String getCreatePostForm(Model model) {
+    public String getCreatePostForm(Model model, @AuthenticationPrincipal User user) {
         LOGGER.info("Received a GET request to url: /posts/create");
+
+        List<UserGroup> userGroups = userGroupService.findAllByIdUserIdAndRoleIn(user.getId(), List.of(UserRole.ADMIN, UserRole.WRITER));
+        List<Group> groups = groupService.findAllById(userGroups.stream().map(ug -> ug.getId().getGroupId()).toList());
+        model.addAttribute("groups", groups.stream().map(GroupMini::new).toList());
 
         return "posts/create";
     }
 
     @PostMapping
     public String createPost(@RequestParam("title") String title, @RequestParam("tags") String tags,
-                             @RequestParam("content") String content, @AuthenticationPrincipal User user) {
+                             @RequestParam("content") String content, @RequestParam("group") long groupId,
+                             @AuthenticationPrincipal User user) {
         LOGGER.info("Received a POST request to url: /posts");
 
-        Post post = new Post(user, null, title, content, LocalDate.now(), List.of(tags.split(" ")));
+
+        Post post = new Post(user, groupService.findById(groupId), title, content, LocalDate.now(), List.of(tags.split(" ")));
         postService.save(post);
 
         LOGGER.info("Success create new post");

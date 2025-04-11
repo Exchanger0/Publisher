@@ -42,7 +42,7 @@ public class UserService extends BaseService<User, Long, UserRepo> {
     public void deleteAllById(Iterable<? extends Long> ids) {
         Session session = entityManager.unwrap(Session.class);
 
-        //удаление записи о том, что пользователь член этой группы, созданной пользователем
+        //удаление записи о том, что пользователь, который член этой группы, созданной пользователем
         session.createMutationQuery("""
                 DELETE UserGroup ug WHERE ug.id.groupId IN (
                     SELECT gr.id FROM Group gr WHERE gr.creator.id in :ids
